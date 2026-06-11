@@ -133,4 +133,12 @@ fi
 
 echo "installed SmartCash 3.0 $ROLE node"
 echo "config: $CONFDIR/smartcash.conf"
-echo "status: systemctl status smartcash3"
+echo
+echo "Useful commands:"
+echo "  /usr/local/bin/smartcash-cli -conf=/etc/smartcash3/smartcash.conf -datadir=/var/lib/smartcash3 getinfo"
+echo "  /usr/local/bin/smartcash-cli -conf=/etc/smartcash3/smartcash.conf -datadir=/var/lib/smartcash3 getconnectioncount"
+echo "  /usr/local/bin/smartcash-cli -conf=/etc/smartcash3/smartcash.conf -datadir=/var/lib/smartcash3 getblockcount"
+echo "  /usr/local/bin/smartcash-cli -conf=/etc/smartcash3/smartcash.conf -datadir=/var/lib/smartcash3 getwalletinfo"
+echo "  /usr/local/bin/smartcash-cli -conf=/etc/smartcash3/smartcash.conf -datadir=/var/lib/smartcash3 listtransactions"
+echo "  systemctl status smartcash3 --no-pager"
+echo "  journalctl -u smartcash3 -f"
