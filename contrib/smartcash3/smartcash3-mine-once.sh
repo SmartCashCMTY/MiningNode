@@ -24,7 +24,11 @@ MINING_CPU_QUOTA="${MINING_CPU_QUOTA:-10%}"
 cpu_quota_applied=0
 
 if [[ -z "$PAYOUT_ADDRESS" ]]; then
-  echo "PAYOUT_ADDRESS is required in $ENVFILE or the service environment" >&2
+  PAYOUT_ADDRESS="$($CLI -conf="$CONF" -datadir="$DATADIR" getnewaddress 2>/dev/null)" || true
+fi
+
+if [[ -z "$PAYOUT_ADDRESS" ]]; then
+  echo "PAYOUT_ADDRESS is required. Set it in $ENVFILE or enable the wallet." >&2
   exit 1
 fi
 

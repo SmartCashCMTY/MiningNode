@@ -10,7 +10,7 @@ CONFDIR="/etc/smartcash3"
 MINER_ENV="$CONFDIR/miner.env"
 RELEASE_URL="https://github.com/SmartCashCMTY/Node-Client-Wallet/releases/download/v3.0.0"
 ARCHIVE_NAME="smartcash3-3.0.0-x86_64-linux-gnu.tar.gz"
-ARCHIVE_SHA256="d05b8dcb75e88a70d8c280ffb32533bf680a4ed29a9fb3e48b3dcbad59ba6bd4"
+ARCHIVE_SHA256="5695288db0b5a475b2e2865c9b8b1c247b4494ccf7d8ac59ab6a16e0068dbd77"
 PUBLIC_PEERS=(
   "151.252.59.32:29678"
   "151.252.59.33:29678"
@@ -30,12 +30,13 @@ case "$ROLE" in
 esac
 
 if [[ "$ROLE" == "miner" && -z "${MINING_ADDRESS:-}" ]]; then
-  read -r -p "Enter mining payout address: " MINING_ADDRESS
+  read -r -p "Enter mining payout address (leave empty to auto-generate): " MINING_ADDRESS || true
 fi
 
+WALLET_DISABLED=0
 if [[ "$ROLE" == "miner" && -z "${MINING_ADDRESS:-}" ]]; then
-  echo "MINING_ADDRESS is required for miner role" >&2
-  exit 1
+  echo "No MINING_ADDRESS provided - wallet will be enabled to auto-generate a payout address."
+  WALLET_DISABLED=1
 fi
 
 apt-get update
@@ -74,7 +75,7 @@ rpcpassword=$RPCPASSWORD
 externalip=$EXTERNAL_IP:29678
 EOF_CONF
 
-if [[ "$ROLE" != "smartnode" ]]; then
+if [[ "$ROLE" != "smartnode" && "$ROLE" != "miner" ]]; then
   echo "disablewallet=1" >> "$CONFDIR/smartcash.conf"
 fi
 
@@ -95,7 +96,7 @@ fi
 
 if [[ "$ROLE" == "miner" ]]; then
   cat > "$MINER_ENV" <<EOF_CONF
-PAYOUT_ADDRESS=${PAYOUT_ADDRESS:-$MINING_ADDRESS}
+PAYOUT_ADDRESS=${PAYOUT_ADDRESS:-${MINING_ADDRESS:-}}
 GENERATE_BLOCKS=${GENERATE_BLOCKS:-1}
 MAX_TRIES=${MAX_TRIES:-100000000}
 MIN_BLOCK_HEIGHT=${MIN_BLOCK_HEIGHT:-4269520}
