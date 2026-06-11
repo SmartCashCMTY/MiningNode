@@ -118,6 +118,7 @@ if [[ "$ROLE" == "miner" ]]; then
 fi
 systemctl daemon-reload
 
+sed -i 's/^IPV6=yes/IPV6=no/' /etc/default/ufw
 ufw allow 29678/tcp
 if [[ "$ROLE" == "smartnode" ]]; then
   ufw allow 28080/tcp
