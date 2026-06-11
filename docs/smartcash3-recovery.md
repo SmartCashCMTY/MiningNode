@@ -11,10 +11,10 @@ Download wallets only from GitHub releases:
 
 ```text
 Core Linux/Windows wallet releases:
-https://github.com/SmartCashCMTY/MiningNode/releases/tag/v3.0.0
+https://github.com/SmartCashCMTY/Node-Client-Wallet/releases/tag/v3.0.0
 
 BeeHive Desktop Light Wallet Linux/Windows releases:
-https://github.com/SmartCashCMTY/BeeHive/releases/tag/v3.0.0
+https://github.com/SmartCashCMTY/BeeHive-Wallet/releases/tag/v3.0.0
 ```
 
 For the Windows Core wallet, select this release asset from GitHub:
@@ -199,9 +199,11 @@ invalid binaries or confusing linker failures.
 Copy blockchain from the previous chain snapshot to the seed node:
 
 ```bash
-rsync -aH --numeric-ids root@151.252.55.244:/root/.smartcash/blocks /var/lib/smartcash3/
-rsync -aH --numeric-ids root@151.252.55.244:/root/.smartcash/chainstate /var/lib/smartcash3/
-rsync -aH --numeric-ids root@151.252.55.244:/root/.smartcash/rewards /var/lib/smartcash3/
+# Copy blockchain data from the previous chain snapshot to the seed node.
+# Replace SOURCE_SERVER with your actual bootstrap source host.
+rsync -aH --numeric-ids root@SOURCE_SERVER:/root/.smartcash/blocks /var/lib/smartcash3/
+rsync -aH --numeric-ids root@SOURCE_SERVER:/root/.smartcash/chainstate /var/lib/smartcash3/
+rsync -aH --numeric-ids root@SOURCE_SERVER:/root/.smartcash/rewards /var/lib/smartcash3/
 rm -f /var/lib/smartcash3/peers.dat /var/lib/smartcash3/banlist.dat /var/lib/smartcash3/mempool.dat /var/lib/smartcash3/netfulfilled.dat
 chown -R smartcash:smartcash /var/lib/smartcash3
 ```
@@ -249,9 +251,7 @@ sapi=1
 sapiport=28080
 smartnode=1
 smartnodeprivkey=<smartnode-private-key>
-externalip=151.252.59.33
-addnode=151.252.59.32:29678
-addnode=151.252.59.33:29678
+externalip=YOUR_VPS_PUBLIC_IP
 addnode=151.252.59.32:29678
 addnode=151.252.59.33:29678
 ```

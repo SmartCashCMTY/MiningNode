@@ -254,15 +254,15 @@ the blockchain.
 
 Requirements:
 
-- Node.js `18.x`
-- npm `9.x`
+- Node.js `20.x`
+- npm `10.x`
 - 8 GB RAM recommended for builds
 
 Build:
 
 ```bash
-git clone https://github.com/SmartCashCMTY/beehive-desktop.git
-cd beehive-desktop
+git clone https://github.com/SmartCashCMTY/BeeHive-Wallet.git
+cd BeeHive-Wallet
 npm install --legacy-peer-deps
 npm run build:linux
 npm run build:win
@@ -276,7 +276,7 @@ Artifacts are created in `dist/`:
 Published BeeHive Desktop Light Wallet binaries are downloaded only from GitHub:
 
 ```text
-https://github.com/SmartCashCMTY/beehive-desktop/releases/tag/v3.0.0
+https://github.com/SmartCashCMTY/BeeHive-Wallet/releases/tag/v3.0.0
 ```
 
 ## 6. Install A CPU Mining Node
