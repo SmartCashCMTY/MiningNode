@@ -1,0 +1,280 @@
+configure: loading site script /root/SmartCash3/core-smart/depends/x86_64-w64-mingw32/share/config.site
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-w64-mingw32
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for x86_64-w64-mingw32-strip... x86_64-w64-mingw32-strip
+checking for a race-free mkdir -p... /usr/bin/mkdir -p
+checking for gawk... no
+checking for mawk... mawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether to enable maintainer-specific portions of Makefiles... yes
+checking whether make supports nested variables... (cached) yes
+checking whether the C++ compiler works... yes
+checking for C++ compiler default output file name... a.exe
+checking for suffix of executables... .exe
+checking whether we are cross compiling... yes
+checking for suffix of object files... o
+checking whether the compiler supports GNU C++... yes
+checking whether x86_64-w64-mingw32-g++ accepts -g... yes
+checking for x86_64-w64-mingw32-g++ option to enable C++11 features... none needed
+checking whether make supports the include directive... yes (GNU style)
+checking dependency style of x86_64-w64-mingw32-g++... gcc3
+checking whether x86_64-w64-mingw32-g++ supports C++11 features by default... yes
+checking whether std::atomic can be used without link library... yes
+checking for x86_64-w64-mingw32-g++... x86_64-w64-mingw32-g++
+checking whether the compiler supports GNU Objective C++... no
+checking whether x86_64-w64-mingw32-g++ accepts -g... no
+checking dependency style of x86_64-w64-mingw32-g++... gcc3
+checking how to print strings... printf
+checking for x86_64-w64-mingw32-gcc... x86_64-w64-mingw32-gcc
+checking whether the compiler supports GNU C... yes
+checking whether x86_64-w64-mingw32-gcc accepts -g... yes
+checking for x86_64-w64-mingw32-gcc option to enable C11 features... none needed
+checking whether x86_64-w64-mingw32-gcc understands -c and -o together... yes
+checking dependency style of x86_64-w64-mingw32-gcc... gcc3
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by x86_64-w64-mingw32-gcc... /usr/bin/x86_64-w64-mingw32-ld
+checking if the linker (/usr/bin/x86_64-w64-mingw32-ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... x86_64-w64-mingw32-nm
+checking the name lister (x86_64-w64-mingw32-nm) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-w64-mingw32 format... func_convert_file_nix_to_w32
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/x86_64-w64-mingw32-ld option to reload object files... -r
+checking for x86_64-w64-mingw32-file... no
+checking for file... file
+configure: WARNING: using cross tools not prefixed with host triplet
+checking for x86_64-w64-mingw32-objdump... x86_64-w64-mingw32-objdump
+checking how to recognize dependent libraries... (cached) pass_all
+checking for x86_64-w64-mingw32-dlltool... x86_64-w64-mingw32-dlltool
+checking how to associate runtime and link libraries... func_cygming_dll_for_implib
+checking for x86_64-w64-mingw32-ar... x86_64-w64-mingw32-ar
+checking for archiver @FILE support... @
+checking for x86_64-w64-mingw32-strip... (cached) x86_64-w64-mingw32-strip
+checking for x86_64-w64-mingw32-ranlib... x86_64-w64-mingw32-ranlib
+checking command to parse x86_64-w64-mingw32-nm output from x86_64-w64-mingw32-gcc object... ok
+checking for sysroot... no
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+checking for x86_64-w64-mingw32-mt... no
+checking for mt... mt
+checking if mt is a manifest tool... no
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... no
+checking for objdir... .libs
+checking if x86_64-w64-mingw32-gcc supports -fno-rtti -fno-exceptions... no
+checking for x86_64-w64-mingw32-gcc option to produce PIC... -DDLL_EXPORT -DPIC
+checking if x86_64-w64-mingw32-gcc PIC flag -DDLL_EXPORT -DPIC works... yes
+checking if x86_64-w64-mingw32-gcc static flag -static works... yes
+checking if x86_64-w64-mingw32-gcc supports -c -o file.o... yes
+checking if x86_64-w64-mingw32-gcc supports -c -o file.o... (cached) yes
+checking whether the x86_64-w64-mingw32-gcc linker (/usr/bin/x86_64-w64-mingw32-ld) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... yes
+checking dynamic linker characteristics... Win32 ld.exe
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... yes
+checking how to run the C++ preprocessor... x86_64-w64-mingw32-g++ -E
+checking for ld used by x86_64-w64-mingw32-g++... /usr/bin/x86_64-w64-mingw32-ld
+checking if the linker (/usr/bin/x86_64-w64-mingw32-ld) is GNU ld... yes
+checking whether the x86_64-w64-mingw32-g++ linker (/usr/bin/x86_64-w64-mingw32-ld) supports shared libraries... yes
+checking for x86_64-w64-mingw32-g++ option to produce PIC... -DDLL_EXPORT -DPIC
+checking if x86_64-w64-mingw32-g++ PIC flag -DDLL_EXPORT -DPIC works... yes
+checking if x86_64-w64-mingw32-g++ static flag -static works... yes
+checking if x86_64-w64-mingw32-g++ supports -c -o file.o... yes
+checking if x86_64-w64-mingw32-g++ supports -c -o file.o... (cached) yes
+checking whether the x86_64-w64-mingw32-g++ linker (/usr/bin/x86_64-w64-mingw32-ld) supports shared libraries... yes
+checking dynamic linker characteristics... Win32 ld.exe
+checking how to hardcode library paths into programs... immediate
+checking for x86_64-w64-mingw32-ar... /usr/bin/x86_64-w64-mingw32-ar
+checking for x86_64-w64-mingw32-ranlib... /usr/bin/x86_64-w64-mingw32-ranlib
+checking for x86_64-w64-mingw32-strip... /usr/bin/x86_64-w64-mingw32-strip
+checking for x86_64-w64-mingw32-gcov... /usr/bin/x86_64-w64-mingw32-gcov
+checking for lcov... no
+checking for java... no
+checking for python3.6... no
+checking for python3.5... no
+checking for python3.4... no
+checking for python3... /usr/bin/python3
+checking for genhtml... no
+checking for git... /usr/bin/git
+checking for ccache... no
+checking for xgettext... no
+checking for hexdump... /usr/bin/hexdump
+checking for x86_64-w64-mingw32-readelf... /usr/bin/x86_64-w64-mingw32-readelf
+checking for x86_64-w64-mingw32-c++filt... /usr/bin/x86_64-w64-mingw32-c++filt
+checking for x86_64-w64-mingw32-objcopy... /usr/bin/x86_64-w64-mingw32-objcopy
+checking whether C++ compiler accepts -Werror... yes
+checking whether C++ compiler accepts -msse4.2... yes
+checking whether C++ compiler accepts -msse4.1... yes
+checking whether C++ compiler accepts -mavx -mavx2... yes
+checking whether C++ compiler accepts -msse4 -msha... yes
+checking for SSE4.2 intrinsics... yes
+checking for SSE4.1 intrinsics... yes
+checking for AVX2 intrinsics... yes
+checking for SHA-NI intrinsics... yes
+checking whether C++ compiler accepts -march=armv8-a+crc+crypto... no
+checking for ARM CRC32 intrinsics... no
+checking for main in -lmingwthrd... yes
+checking for main in -lkernel32... yes
+checking for main in -luser32... yes
+checking for main in -lgdi32... yes
+checking for main in -lcomdlg32... yes
+checking for main in -lwinspool... yes
+checking for main in -lwinmm... yes
+checking for main in -lshell32... yes
+checking for main in -lcomctl32... yes
+checking for main in -lole32... yes
+checking for main in -loleaut32... yes
+checking for main in -luuid... yes
+checking for main in -lrpcrt4... yes
+checking for main in -ladvapi32... yes
+checking for main in -lws2_32... yes
+checking for main in -lmswsock... yes
+checking for main in -lshlwapi... yes
+checking for main in -liphlpapi... yes
+checking for main in -lcrypt32... yes
+checking whether the linker accepts -static... yes
+checking for makensis... /usr/bin/makensis
+checking for x86_64-w64-mingw32-windres... /usr/bin/x86_64-w64-mingw32-windres
+checking whether byte ordering is bigendian... no
+checking how to run the C preprocessor... x86_64-w64-mingw32-gcc -E
+checking whether x86_64-w64-mingw32-gcc is Clang... no
+checking whether pthreads work with -pthread... yes
+checking for joinable pthread attribute... PTHREAD_CREATE_JOINABLE
+checking whether more special flags are required for pthreads... no
+checking for PTHREAD_PRIO_INHERIT... yes
+checking for special C compiler options needed for large files... no
+checking for _FILE_OFFSET_BITS value needed for large files... 64
+checking for x86_64-w64-mingw32-g++ options needed to detect all undeclared functions... none needed
+checking whether strerror_r is declared... no
+checking whether strerror_r returns char *... no
+checking whether the linker accepts -Wl,--large-address-aware... no
+checking for __attribute__((visibility))... yes
+checking for __attribute__((dllexport))... yes
+checking for __attribute__((dllimport))... yes
+checking for library containing clock_gettime... no
+checking whether C++ compiler accepts -Wstack-protector... yes
+checking whether C++ compiler accepts -fstack-protector-all... yes
+checking whether C++ preprocessor accepts -D_FORTIFY_SOURCE=2... yes
+checking whether C++ preprocessor accepts -U_FORTIFY_SOURCE... yes
+checking whether the linker accepts -Wl,--dynamicbase... yes
+checking whether the linker accepts -Wl,--nxcompat... yes
+checking whether the linker accepts -Wl,-z,relro... no
+checking whether the linker accepts -Wl,-z,now... no
+checking for main in -lssp... yes
+checking for endian.h... no
+checking for sys/endian.h... no
+checking for byteswap.h... no
+checking for stdio.h... (cached) yes
+checking for stdlib.h... (cached) yes
+checking for unistd.h... (cached) yes
+checking for strings.h... (cached) yes
+checking for sys/types.h... (cached) yes
+checking for sys/stat.h... (cached) yes
+checking for sys/select.h... no
+checking for sys/prctl.h... no
+checking whether strnlen is declared... yes
+checking whether le16toh is declared... no
+checking whether le32toh is declared... no
+checking whether le64toh is declared... no
+checking whether htole16 is declared... no
+checking whether htole32 is declared... no
+checking whether htole64 is declared... no
+checking whether be16toh is declared... no
+checking whether be32toh is declared... no
+checking whether be64toh is declared... no
+checking whether htobe16 is declared... no
+checking whether htobe32 is declared... no
+checking whether htobe64 is declared... no
+checking whether bswap_16 is declared... no
+checking whether bswap_32 is declared... no
+checking whether bswap_64 is declared... no
+checking for MSG_NOSIGNAL... no
+checking for visibility attribute... yes
+checking whether C++ compiler accepts -fvisibility=hidden... yes
+checking for Berkeley DB C++ headers... default
+checking for main in -ldb_cxx-4.8... yes
+checking for miniupnpc/miniwget.h... yes
+checking for main in -lminiupnpc... yes
+checking for miniupnpc/miniupnpc.h... yes
+checking for main in -lminiupnpc... (cached) yes
+checking for miniupnpc/upnpcommands.h... yes
+checking for main in -lminiupnpc... (cached) yes
+checking for miniupnpc/upnperrors.h... yes
+checking for main in -lminiupnpc... (cached) yes
+checking for QtPlugin... yes
+checking for QApplication... yes
+checking for QLocalSocket... yes
+checking for Qt 5... yes
+checking for main in -limm32... yes
+checking for main in -lz ... no
+configure: WARNING: zlib not found. Assuming qt has it built-in
+checking for main in -lpng ... no
+configure: WARNING: libpng not found. Assuming qt has it built-in
+checking for main in -ljpeg ... no
+configure: WARNING: libjpeg not found. Assuming qt has it built-in
+checking for library containing pcre16_exec... -lqtpcre
+checking for library containing hb_ot_tags_from_script ... -lqtharfbuzzng
+checking for main in -lQt5Core   ... yes
+checking for main in -lQt5Gui    ... yes
+checking for main in -lQt5Network... yes
+checking for main in -lQt5Widgets... yes
+checking for main in -lQt5Test... yes
+checking for QTest... yes
+checking for main in -lQt5DBus... yes
+checking for QtDBus... yes
+checking for static Qt... yes
+checking for Qt >= 5.6... yes
+checking for main in -lQt5PlatformSupport... yes
+checking for Qt < 5.4... no
+checking for static Qt plugins: -lqwindows... yes
+checking whether -fPIE can be used with this Qt config... yes
+checking for moc-qt5... no
+checking for moc5... no
+checking for moc... /root/SmartCash3/core-smart/depends/x86_64-w64-mingw32/share/../native/bin/moc
+checking for uic-qt5... no
+checking for uic5... no
+checking for uic... /root/SmartCash3/core-smart/depends/x86_64-w64-mingw32/share/../native/bin/uic
+checking for rcc-qt5... no
+checking for rcc5... no
+checking for rcc... /root/SmartCash3/core-smart/depends/x86_64-w64-mingw32/share/../native/bin/rcc
+checking for lrelease-qt5... no
+checking for lrelease5... no
+checking for lrelease... /root/SmartCash3/core-smart/depends/x86_64-w64-mingw32/share/../native/bin/lrelease
+checking for lupdate-qt5... no
+checking for lupdate5... no
+checking for lupdate... no
+checking whether the linker accepts -mwindows... yes
+checking whether to build SmartCash GUI... configure: WARNING: "lupdate is required to update qt translations"
+yes (Qt5)
+checking for boostlib >= 1.47.0... yes
+checking whether the Boost::System library is available... yes
+checking for exit in -lboost_system-mt-s... yes
+checking whether the Boost::Filesystem library is available... yes
+checking for exit in -lboost_filesystem-mt-s... yes
+checking whether the Boost::Program_Options library is available... yes
+checking for exit in -lboost_program_options-mt-s... yes
+checking whether the Boost::Thread library is available... yes
+checking for exit in -lboost_thread_win32-mt-s... yes
+checking whether the Boost::Chrono library is available... yes
+checking for exit in -lboost_chrono-mt-s... yes
+checking for working boost reduced exports... yes
+checking whether the linker accepts -Wl,--exclude-libs,ALL... yes
+checking for mismatched boost c++11 scoped enums... ok

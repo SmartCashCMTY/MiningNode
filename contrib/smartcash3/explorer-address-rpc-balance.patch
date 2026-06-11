@@ -1,0 +1,44 @@
+diff --git a/routes/index.js b/routes/index.js
+--- a/routes/index.js
++++ b/routes/index.js
+@@ -146,9 +146,16 @@ function route_get_address(res, hash, count) {
+   db.get_address(hash, function(address) {
+     if (address) {
+       var txs = [];
+-      res.render('address', { active: 'address', address: address, txs: txs});
++      lib.get_address_balance(hash, function(rpcBalance) {
++        if (rpcBalance && rpcBalance.received >= 0 && rpcBalance.balance >= 0) {
++          address.received = rpcBalance.received;
++          address.sent = rpcBalance.received - rpcBalance.balance;
++          address.balance_source = 'chain-rpc';
++        }
++        res.render('address', { active: 'address', address: address, txs: txs});
++      });
+     } else {
+       route_get_index(res, hash + ' not found');
+     }
+   });
+ }
+diff --git a/lib/explorer.js b/lib/explorer.js
+--- a/lib/explorer.js
++++ b/lib/explorer.js
+@@ -581,6 +581,19 @@ module.exports = {
+     }
+   },
+ 
++  get_address_balance: function(address, cb) {
++    rpcCommand([{method:'getaddressbalance', parameters: [{addresses: [address]}]}], function(response) {
++      if (!response || response == 'There was an error. Check your console.') {
++        return cb(null);
++      }
++
++      return cb({
++        balance: parseInt(response.balance) || 0,
++        received: parseInt(response.received) || 0
++      });
++    });
++  },
++
+   get_smartnodes: function(cb) {
+     rpcCommand([{method:'smartnode', parameters: ['list', 'full']}], function(response) {
+       var smartnodes = [];

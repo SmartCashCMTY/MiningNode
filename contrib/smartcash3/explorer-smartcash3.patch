@@ -1,0 +1,237 @@
+diff --git a/routes/index.js b/routes/index.js
+--- a/routes/index.js
++++ b/routes/index.js
+@@ -5,7 +5,41 @@ var express = require('express')
+     , db = require('../lib/database')
+     , lib = require('../lib/explorer')
+     , qr = require('qr-image');
++var https = require('https');
+ 
++var smartcashPriceCache = { price: 0, updated: 0 };
++
++function get_smartcash_price(cb) {
++  if (settings.index.show_smartcash_price !== true) {
++    return cb(0);
++  }
++
++  var now = Date.now();
++  if (smartcashPriceCache.price > 0 && now - smartcashPriceCache.updated < 10 * 60 * 1000) {
++    return cb(smartcashPriceCache.price);
++  }
++
++  var req = https.get('https://coinmarketcap.com/currencies/smartcash/', {
++    headers: { 'User-Agent': 'Mozilla/5.0' },
++    timeout: 15000
++  }, function(response) {
++    var body = '';
++    response.on('data', function(chunk) { body += chunk; });
++    response.on('end', function() {
++      var marker = 'The live SmartCash price today is $';
++      var index = body.indexOf(marker);
++      var match = index >= 0 ? body.slice(index + marker.length, index + marker.length + 32).match(/^[0-9.]+/) : null;
++      if (match) {
++        smartcashPriceCache = { price: parseFloat(match[0]), updated: now };
++      }
++      return cb(smartcashPriceCache.price || 0);
++    });
++  });
++
++  req.on('timeout', function() { req.destroy(); });
++  req.on('error', function() { return cb(smartcashPriceCache.price || 0); });
++}
++
+ function route_get_block(res, blockhash) {
+   lib.get_block(blockhash, function (block) {
+     if (block != 'There was an error. Check your console.') {
+@@ -311,17 +347,19 @@ router.get('/ext/summary', function(req, res) {
+         lib.get_blockcount(function(blockcount) {
+           db.get_stats(settings.coin, function (stats) {
+-            if (hashrate == 'There was an error. Check your console.') {
+-              hashrate = 0;
+-            }
+-            res.send({ data: [{
+-              difficulty: difficulty,
+-              difficultyHybrid: difficultyHybrid,
+-              supply: stats.supply,
+-              hashrate: hashrate,
+-              lastPrice: stats.last_price,
+-              connections: connections,
+-              blockcount: blockcount
+-            }]});
++            get_smartcash_price(function(smartcashPrice) {
++              if (hashrate == 'There was an error. Check your console.') {
++                hashrate = 0;
++              }
++              res.send({ data: [{
++                difficulty: difficulty,
++                difficultyHybrid: difficultyHybrid,
++                supply: stats.supply,
++                hashrate: hashrate,
++                lastPrice: smartcashPrice || stats.last_price,
++                connections: connections,
++                blockcount: blockcount
++              }]});
++            });
+           });
+         });
+       });
+diff --git a/views/layout.pug b/views/layout.pug
+--- a/views/layout.pug
++++ b/views/layout.pug
+@@ -3,6 +3,8 @@ doctype html
+ html
+   head
+     title= settings.title
++    link(rel='icon', type='image/png', href='/images/logo.png')
++    link(rel='shortcut icon', type='image/png', href='/images/logo.png')
+     link(rel='stylesheet', href='/themes/' + settings.theme + '/bootstrap.min.css')
+     link(rel='stylesheet', href='/vendor/jqplot/jquery.jqplot.css')
+     link(rel='stylesheet', href='/vendor/flags-css/css/flag-icon.min.css')
+@@ -32,7 +32,8 @@ html
+              var diffString = json.data[0].difficulty;
+             var hashrateString = json.data[0].hashrate;
+             if (!isNaN(json.data[0].difficulty)) {
+-              diffString = parseFloat(json.data[0].difficulty).toFixed(2);
++              var difficulty = parseFloat(json.data[0].difficulty);
++              diffString = difficulty < 1 ? difficulty.toFixed(8) : difficulty.toFixed(2);
+             }
+             if (!isNaN(json.data[0].supply)) {
+               supplyString = parseInt(parseFloat(json.data[0].supply).toFixed(0)).toLocaleString('en');
+@@ -44,8 +45,10 @@ html
+             $("#difficulty").text(diffString);
+             $("#difficultyHybrid").text(json.data[0].difficultyHybrid);
+             $("#hashrate").text(hashrateString);
+-            $("#lastPrice").text(parseFloat(json.data[0].lastPrice).toFixed(8) + ' #{settings.markets.exchange}'.toUpperCase());
+-            $("#marketCap").text((parseFloat(json.data[0].lastPrice).toFixed(8) * parseInt(parseFloat(json.data[0].supply).toFixed(0))).toLocaleString('en') + ' #{settings.markets.exchange}'.toUpperCase());
++            if (#{settings.index.show_smartcash_price || settings.display.markets}) {
++              $("#lastPrice").text(parseFloat(json.data[0].lastPrice).toFixed(8) + ' #{settings.markets.exchange}'.toUpperCase());
++              $("#marketCap").text((parseFloat(json.data[0].lastPrice).toFixed(8) * parseInt(parseFloat(json.data[0].supply).toFixed(0))).toLocaleString('en') + ' #{settings.markets.exchange}'.toUpperCase());
++            }
+             $("#lblConnections").text(json.data[0].connections + ' connections');
+             $("#lblBlockcount").text(json.data[0].blockcount + ' blocks');
+             $("#lblX1").text(' ');
+@@ -222,21 +225,22 @@ html
+                   label (
+                   label#marketCap -
+                   label )
+-        .col-md-2
+-          .card.card-default.d-none.d-md-block.d-block
+-            if settings.index.show_market_cap != true || settings.index.show_market_cap_over_price != true
+-              .card-header
+-                strong #{settings.markets.exchange} Price
+-              .card-body
+-                #pricecard
+-                  span.header-icons.fa.fa-rocket
+-                  if settings.index.difficulty == 'Hybrid'
+-                    label#lastPrice -
+-                    <br>
+-                    label#lblX1
+-                  else
+-                    label#lastPrice -
+-          if settings.index.show_market_cap == true && settings.index.show_market_cap_over_price == true
++        if settings.index.show_smartcash_price == true || settings.display.markets == true
++          .col-md-2
++            .card.card-default.d-none.d-md-block.d-block
++              if settings.index.show_market_cap != true || settings.index.show_market_cap_over_price != true
++                .card-header
++                  strong #{settings.markets.coin} Price
++                .card-body
++                  #pricecard
++                    span.header-icons.fa.fa-rocket
++                    if settings.index.difficulty == 'Hybrid'
++                      label#lastPrice -
++                      <br>
++                      label#lblX1
++                    else
++                      label#lastPrice -
++            if settings.index.show_market_cap == true && settings.index.show_market_cap_over_price == true
+             .card-header
+               strong Market Cap
+             .card-body
+@@ -277,7 +281,11 @@ html
+         ul.nav.justify-content-center
+          li.text-center(style='margin-left:0;margin-right:0;')
+             p(style='')
+-              a.nav-link.poweredby(href='https://github.com/iquidus/explorer', target='_blank') Powered by Iquidus Explorer v#{settings.iquidus_version}
++              span.nav-link.poweredby(style='white-space:nowrap;color:#fff;')
++                | Community hosting sponsored by The earea Company ISA |
++                a(href='https://www.earea.de/impressum/', target='_blank', rel='noopener noreferrer', style='color:#fff;') Impressum
++                |  |
++                a(href='https://www.earea.de/datenschutz/', target='_blank', rel='noopener noreferrer', style='color:#fff;') Datenschutz
+       .col-md-4.navbar-nav
+         ui.nav.justify-content-end
+           label#lblBlockcount.badge.badge-pill.nav-link
+diff --git a/app.js b/app.js
+--- a/app.js
++++ b/app.js
+@@ -267,1 +267,45 @@ app.use('/ext/connections', function(req,res){
+-    res.send({data: peers});
++    if (peers && peers.length > 0) {
++      return res.send({data: peers});
++    }
++
++    request({uri: 'http://127.0.0.1:' + settings.port + '/api/getpeerinfo', json: true}, function(error, response, body) {
++      var nodes = [{
++        address: '151.252.59.32',
++        port: '29678',
++        protocol: 90300,
++        version: 'SmartCash Core:3.0.0',
++        country: '',
++        country_code: ''
++      }];
++
++      if (Array.isArray(body)) {
++        body.forEach(function(peer) {
++          var portSplit = peer.addr.lastIndexOf(':');
++          var address = portSplit > -1 ? peer.addr.substring(0, portSplit) : peer.addr;
++          var port = portSplit > -1 ? peer.addr.substring(portSplit + 1) : '29678';
++          if (!nodes.some(function(node) { return node.address == address; })) {
++            nodes.push({
++              address: address,
++              port: port,
++              protocol: peer.version,
++              version: peer.subver ? peer.subver.replace('/', '').replace('/', '') : '',
++              country: '',
++              country_code: ''
++            });
++          }
++        });
++      }
++
++      if (!nodes.some(function(node) { return node.address == '151.252.59.33'; })) {
++        nodes.push({
++          address: '151.252.59.33',
++          port: '29678',
++          protocol: 90300,
++          version: 'SmartCash Core:3.0.0',
++          country: '',
++          country_code: ''
++        });
++      }
++
++      return res.send({data: nodes});
++    });
+diff --git a/lib/explorer.js b/lib/explorer.js
+--- a/lib/explorer.js
++++ b/lib/explorer.js
+@@ -21,7 +21,10 @@ function coinbase_supply(cb) {
+ 
+ function rpcCommand(params, cb) {
+   client.command([{method: params[0].method, parameters: params[0].parameters}], function(err, response){
+-    if(err){console.log('Error: ', err); }
++    if(err){
++      console.log('Error: ', err);
++      return cb('There was an error. Check your console.');
++    }
+     else{
+       if(response[0].name == 'RpcError'){
+         return cb('There was an error. Check your console.');
+@@ -553,7 +556,7 @@ module.exports = {
+       });
+     } else {
+       module.exports.get_rawtransaction(input.txid, function(tx){
+-        if (tx) {
++        if (tx && tx.vout) {
+           module.exports.syncLoop(tx.vout.length, function (loop) {
+             var i = loop.iteration();
+              if (tx.vout[i].n == input.vout) {

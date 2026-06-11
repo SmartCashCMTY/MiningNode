@@ -1,0 +1,25 @@
+daemon=1
+server=1
+listen=1
+txindex=1
+maxconnections=128
+port=29678
+rpcport=29679
+rpcbind=127.0.0.1
+rpcallowip=127.0.0.1
+rpcuser=change_this_rpc_user
+rpcpassword=change_this_rpc_password
+disablewallet=1
+addnode=151.252.59.32:29678
+addnode=151.252.59.33:29678
+
+# SmartNode only
+# smartnode=1
+# smartnodeprivkey=replace_with_smartnode_private_key
+# externalip=151.252.59.33:29678
+# sapi=1
+# sapiport=28080
+
+# CPU miner only: create /etc/smartcash3/miner.env with:
+# PAYOUT_ADDRESS=replace_with_your_payout_address
+# MINING_CPU_QUOTA=10%

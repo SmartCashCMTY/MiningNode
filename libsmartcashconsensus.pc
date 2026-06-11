@@ -1,0 +1,11 @@
+prefix=/root/SmartCash3/core-smart/depends/x86_64-pc-linux-gnu
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: SmartCash consensus library
+Description: Library for the Smartcash consensus protocol.
+Version: 3.0.0
+Libs: -L${libdir} -lsmartcashconsensus
+Cflags: -I${includedir}
+Requires.private: libcrypto

@@ -1,0 +1,11 @@
+prefix=/root/SmartCash3/core-smart/depends/x86_64-pc-linux-gnu
+exec_prefix=${prefix}
+datarootdir=${prefix}/share
+datadir=${datarootdir}
+libdir=${exec_prefix}/lib
+xcbincludedir=${datadir}/xcb
+pythondir=${prefix}/local/lib/python3.12/dist-packages
+
+Name: XCB Proto
+Description: X protocol descriptions for XCB
+Version: 1.10

@@ -1,0 +1,10 @@
+[Unit]
+Description=SmartCash 3.0 Explorer tip sync
+After=smartcash3.service smartcash3-explorer.service docker.service
+Requires=smartcash3.service smartcash3-explorer.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/smartcash3/explorer
+ExecStart=/usr/bin/node scripts/sync-tip.js 250
+Nice=10

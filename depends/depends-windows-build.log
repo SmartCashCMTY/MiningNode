@@ -1,0 +1,2 @@
+copying packages: native_protobuf boost openssl libevent qrencode protobuf qt bdb miniupnpc
+to: /root/SmartCash3/core-smart/depends/x86_64-w64-mingw32

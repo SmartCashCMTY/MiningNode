@@ -1,0 +1,97 @@
+diff --git a/routes/index.js b/routes/index.js
+--- a/routes/index.js
++++ b/routes/index.js
+@@ -209,21 +209,24 @@ router.get('/richlist', function(req, res) {
+       db.get_richlist(settings.coin, function(richlist){
+         //console.log(richlist);
+         if (richlist) {
+-          db.get_distribution(richlist, stats, function(distribution) {
+-            //console.log(distribution);
+-            res.render('richlist', {
+-              active: 'richlist',
+-              balance: richlist.balance,
+-              received: richlist.received,
+-              stats: stats,
+-              dista: distribution.t_1_25,
+-              distb: distribution.t_26_50,
+-              distc: distribution.t_51_75,
+-              distd: distribution.t_76_100,
+-              diste: distribution.t_101plus,
+-              show_dist: settings.richlist.distribution,
+-              show_received: settings.richlist.received,
+-              show_balance: settings.richlist.balance,
++          lib.get_richlist_rpc_balances(richlist.balance, function(balance) {
++            richlist.balance = balance;
++            db.get_distribution(richlist, stats, function(distribution) {
++              //console.log(distribution);
++              res.render('richlist', {
++                active: 'richlist',
++                balance: richlist.balance,
++                received: richlist.received,
++                stats: stats,
++                dista: distribution.t_1_25,
++                distb: distribution.t_26_50,
++                distc: distribution.t_51_75,
++                distd: distribution.t_76_100,
++                diste: distribution.t_101plus,
++                show_dist: false,
++                show_received: settings.richlist.received,
++                show_balance: settings.richlist.balance,
++              });
+             });
+           });
+         } else {
+diff --git a/lib/explorer.js b/lib/explorer.js
+--- a/lib/explorer.js
++++ b/lib/explorer.js
+@@ -595,6 +595,38 @@ module.exports = {
+     });
+   },
+ 
++  get_richlist_rpc_balances: function(items, cb) {
++    var candidates = Array.isArray(items) ? items.slice(0, 100) : [];
++    var result = [];
++
++    module.exports.syncLoop(candidates.length, function(loop) {
++      var i = loop.iteration();
++      var item = candidates[i];
++
++      if (!item || !item.a_id) {
++        loop.next();
++        return;
++      }
++
++      module.exports.get_address_balance(item.a_id, function(rpcBalance) {
++        if (rpcBalance && rpcBalance.balance > 0) {
++          result.push({
++            a_id: item.a_id,
++            balance: rpcBalance.balance,
++            received: rpcBalance.received,
++            name: item.name
++          });
++        }
++        loop.next();
++      });
++    }, function() {
++      result.sort(function(a, b) {
++        return b.balance - a.balance;
++      });
++      return cb(result.slice(0, 100));
++    });
++  },
++
+   get_smartnodes: function(cb) {
+     rpcCommand([{method:'smartnode', parameters: ['list', 'full']}], function(response) {
+       var smartnodes = [];
+diff --git a/views/richlist.pug b/views/richlist.pug
+--- a/views/richlist.pug
++++ b/views/richlist.pug
+@@ -47,6 +47,9 @@ block content
+       .tab-content
+         #balance.tabpanel.tab-pane.active 
++          .alert.alert-warning
++            | Balances are validated against the live chain RPC. The list is limited to addresses already known by the Explorer while the full historical index is still catching up.
++
+           include ./includes/rl_balance.pug
+         #received.tabpanel.tab-pane
+           include ./includes/rl_received.pug

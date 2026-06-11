@@ -1,0 +1,147 @@
+diff --git a/views/layout.pug b/views/layout.pug
+--- a/views/layout.pug
++++ b/views/layout.pug
+@@ -156,6 +156,11 @@ html
+               a.nav-link(href='/richlist')
+                 span.fa.fa-btc
+                 span.menu-text #{settings.locale.menu_richlist}
++          if settings.display.smartnodes != false
++            li#smartnodes
++              a.nav-link(href='/smartnodes')
++                span.fa.fa-server
++                span.menu-text SmartNodes
+           if settings.display.markets == true
+             li#markets
+               a.nav-link.loading(href='/markets/'+settings.markets.default)
+diff --git a/routes/index.js b/routes/index.js
+--- a/routes/index.js
++++ b/routes/index.js
+@@ -237,6 +237,12 @@ router.get('/network', function(req, res) {
+   res.render('network', {active: 'network'});
+ });
+ 
++router.get('/smartnodes', function(req, res) {
++  lib.get_smartnodes(function(smartnodes) {
++    res.render('smartnodes', {active: 'smartnodes', smartnodes: smartnodes});
++  });
++});
++
+ router.get('/reward', function(req, res){
+   //db.get_stats(settings.coin, function (stats) {
+     console.log(stats);
+diff --git a/lib/explorer.js b/lib/explorer.js
+--- a/lib/explorer.js
++++ b/lib/explorer.js
+@@ -581,6 +581,40 @@ module.exports = {
+     });
+   },
+ 
++  get_smartnodes: function(cb) {
++    rpcCommand([{method:'smartnode', parameters: ['list', 'full']}], function(response) {
++      var smartnodes = [];
++
++      if (!response || response == 'There was an error. Check your console.') {
++        return cb(smartnodes);
++      }
++
++      Object.keys(response).forEach(function(outpoint) {
++        var fields = String(response[outpoint]).trim().split(/\s+/);
++        smartnodes.push({
++          outpoint: outpoint,
++          status: fields[0] || '',
++          protocol: fields[1] || '',
++          payee: fields[2] || '',
++          lastSeen: parseInt(fields[3]) || 0,
++          activeSeconds: parseInt(fields[4]) || 0,
++          lastPaidTime: parseInt(fields[5]) || 0,
++          lastPaidBlock: parseInt(fields[6]) || 0,
++          address: fields[7] || ''
++        });
++      });
++
++      smartnodes.sort(function(a, b) {
++        if (a.status == b.status) return a.address.localeCompare(b.address);
++        if (a.status == 'ENABLED') return -1;
++        if (b.status == 'ENABLED') return 1;
++        return a.status.localeCompare(b.status);
++      });
++
++      return cb(smartnodes);
++    });
++  },
++
+   prepare_vin: function(tx, cb) {
+     var arr_vin = [];
+     module.exports.syncLoop(tx.vin.length, function (loop) {
+diff --git a/views/smartnodes.pug b/views/smartnodes.pug
+new file mode 100644
+--- /dev/null
++++ b/views/smartnodes.pug
+@@ -0,0 +1,65 @@
++extends layout
++
++block content
++  .col-md-12(style='margin-bottom:4%')
++    .card.card-default
++      .card-header
++        h5.card-title SmartNodes
++      .card-body
++        if smartnodes.length == 0
++          .alert.alert-warning No SmartNodes found.
++        else
++          .table-responsive
++            table.table.table-hover.table-bordered.table-striped
++              thead
++                tr
++                  th Status
++                  th Address
++                  th Protocol
++                  th Payee
++                  th Last Seen
++                  th Active
++                  th Last Paid
++                  th Outpoint
++              tbody
++                each node in smartnodes
++                  tr
++                    td
++                      if node.status == 'ENABLED'
++                        span.badge.badge-success #{node.status}
++                      else if node.status == 'PRE_ENABLED'
++                        span.badge.badge-info #{node.status}
++                      else if node.status == 'UPDATE_REQUIRED'
++                        span.badge.badge-warning #{node.status}
++                      else
++                        span.badge.badge-secondary #{node.status}
++                    td #{node.address}
++                    td #{node.protocol}
++                    td
++                      if node.payee
++                        a(href='/address/' + node.payee) #{node.payee}
++                    td
++                      if node.lastSeen > 0
++                        script.
++                          document.write(new Date(!{node.lastSeen} * 1000).toLocaleString())
++                      else
++                        | -
++                    td
++                      - var active = node.activeSeconds || 0
++                      - var days = Math.floor(active / 86400)
++                      - var hours = Math.floor((active % 86400) / 3600)
++                      - var minutes = Math.floor((active % 3600) / 60)
++                      if days > 0
++                        | #{days}d #{hours}h
++                      else if hours > 0
++                        | #{hours}h #{minutes}m
++                      else
++                        | #{minutes}m
++                    td
++                      if node.lastPaidTime > 0
++                        script.
++                          document.write(new Date(!{node.lastPaidTime} * 1000).toLocaleString())
++                      else if node.lastPaidBlock > 0
++                        | Block #{node.lastPaidBlock}
++                      else
++                        | -
++                    td
++                      small #{node.outpoint}

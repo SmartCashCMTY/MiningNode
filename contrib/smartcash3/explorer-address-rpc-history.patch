@@ -1,0 +1,159 @@
+diff --git a/app.js b/app.js
+--- a/app.js
++++ b/app.js
+@@ -208,35 +208,41 @@ app.use('/ext/getaddresstxsajax/:address', function(req,res){
+     if(isNaN(req.query.start) || req.query.start < 0){
+         req.query.start = 0;
+     }
+-    db.get_address_txs_ajax(req.params.address, req.query.start, req.query.length,function(txs, count){
+-        var data = [];
+-        for(i=0; i<txs.length; i++){
+-            if(typeof txs[i].txid !== "undefined") {
+-                var out = 0
+-                var vin = 0
+-
+-                txs[i].vout.forEach(function (r) {
+-                    if (r.addresses == req.params.address) {
+-                        out += r.amount;
+-                    }
+-                });
+-
+-                txs[i].vin.forEach(function (s) {
+-                    if (s.addresses == req.params.address) {
+-                        vin += s.amount
+-                    }
+-                });
+-
+-                var row = [];
+-                row.push(new Date((txs[i].timestamp) * 1000).toUTCString());
+-                row.push(txs[i].txid);
+-                row.push(out);
+-                row.push(vin);
+-                row.push(txs[i].balance);
+-                data.push(row);
+-            }
+-        }
+-
+-        res.json({"data":data, "draw": req.query.draw, "recordsTotal": count, "recordsFiltered": count});
++    lib.get_address_txs_rpc_ajax(req.params.address, req.query.start, req.query.length, function(rpcRows, rpcCount) {
++        if (rpcRows) {
++            return res.json({"data": rpcRows, "draw": req.query.draw, "recordsTotal": rpcCount, "recordsFiltered": rpcCount});
++        }
++
++        db.get_address_txs_ajax(req.params.address, req.query.start, req.query.length,function(txs, count){
++            var data = [];
++            for(i=0; i<txs.length; i++){
++                if(typeof txs[i].txid !== "undefined") {
++                    var out = 0
++                    var vin = 0
++
++                    txs[i].vout.forEach(function (r) {
++                        if (r.addresses == req.params.address) {
++                            out += r.amount;
++                        }
++                    });
++
++                    txs[i].vin.forEach(function (s) {
++                        if (s.addresses == req.params.address) {
++                            vin += s.amount
++                        }
++                    });
++
++                    var row = [];
++                    row.push(new Date((txs[i].timestamp) * 1000).toUTCString());
++                    row.push(txs[i].txid);
++                    row.push(out);
++                    row.push(vin);
++                    row.push(txs[i].balance);
++                    data.push(row);
++                }
++            }
++
++            res.json({"data":data, "draw": req.query.draw, "recordsTotal": count, "recordsFiltered": count});
++        });
+     });
+ });
+diff --git a/lib/explorer.js b/lib/explorer.js
+--- a/lib/explorer.js
++++ b/lib/explorer.js
+@@ -581,6 +581,80 @@ module.exports = {
+     }
+   },
+ 
++  get_address_txs_rpc_ajax: function(address, start, length, cb) {
++    start = Number(start) || 0;
++    length = Number(length) || 10;
++
++    rpcCommand([{method:'getaddressdeltas', parameters: [{addresses: [address]}]}], function(deltas) {
++      if (!Array.isArray(deltas)) {
++        return cb(null, 0);
++      }
++
++      var grouped = {};
++      var totalBalance = 0;
++
++      deltas.forEach(function(delta) {
++        var satoshis = parseInt(delta.satoshis) || 0;
++        totalBalance += satoshis;
++
++        if (!grouped[delta.txid]) {
++          grouped[delta.txid] = {
++            txid: delta.txid,
++            net: 0,
++            height: parseInt(delta.height) || 0,
++            blockindex: parseInt(delta.blockindex) || 0,
++            timestamp: 0
++          };
++        }
++
++        grouped[delta.txid].net += satoshis;
++        grouped[delta.txid].height = Math.max(grouped[delta.txid].height, parseInt(delta.height) || 0);
++        grouped[delta.txid].blockindex = Math.max(grouped[delta.txid].blockindex, parseInt(delta.blockindex) || 0);
++      });
++
++      var txs = Object.keys(grouped).map(function(txid) { return grouped[txid]; });
++      txs.sort(function(a, b) {
++        if (a.height != b.height) return b.height - a.height;
++        return b.blockindex - a.blockindex;
++      });
++
++      var runningBalance = totalBalance;
++      txs.forEach(function(tx) {
++        tx.balance = runningBalance;
++        runningBalance -= tx.net;
++      });
++
++      var count = txs.length;
++      var page = txs.slice(start, start + length);
++
++      module.exports.syncLoop(page.length, function(loop) {
++        var i = loop.iteration();
++        module.exports.get_rawtransaction(page[i].txid, function(rawtx) {
++          if (rawtx && rawtx.time) {
++            page[i].timestamp = rawtx.time;
++          } else if (rawtx && rawtx.blocktime) {
++            page[i].timestamp = rawtx.blocktime;
++          }
++          loop.next();
++        });
++      }, function() {
++        var rows = page.map(function(tx) {
++          var out = tx.net > 0 ? tx.net : 0;
++          var vin = tx.net < 0 ? tx.net * -1 : 0;
++          return [
++            tx.timestamp > 0 ? new Date(tx.timestamp * 1000).toUTCString() : '-',
++            tx.txid,
++            out,
++            vin,
++            tx.balance
++          ];
++        });
++
++        return cb(rows, count);
++      });
++    });
++  },
++
+   get_address_balance: function(address, cb) {
+     rpcCommand([{method:'getaddressbalance', parameters: [{addresses: [address]}]}], function(response) {
+       if (!response || response == 'There was an error. Check your console.') {

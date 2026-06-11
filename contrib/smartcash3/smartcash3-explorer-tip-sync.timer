@@ -1,0 +1,11 @@
+[Unit]
+Description=Run SmartCash 3.0 Explorer tip sync
+
+[Timer]
+OnBootSec=3min
+OnUnitActiveSec=60s
+AccuracySec=5s
+Unit=smartcash3-explorer-tip-sync.service
+
+[Install]
+WantedBy=timers.target

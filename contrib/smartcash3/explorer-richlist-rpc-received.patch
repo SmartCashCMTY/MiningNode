@@ -1,0 +1,85 @@
+diff --git a/routes/index.js b/routes/index.js
+--- a/routes/index.js
++++ b/routes/index.js
+@@ -211,21 +211,24 @@ router.get('/richlist', function(req, res) {
+         if (richlist) {
+           lib.get_richlist_rpc_balances(richlist.balance, function(balance) {
+             richlist.balance = balance;
+-            db.get_distribution(richlist, stats, function(distribution) {
+-              //console.log(distribution);
+-              res.render('richlist', {
+-                active: 'richlist',
+-                balance: richlist.balance,
+-                received: richlist.received,
+-                stats: stats,
+-                dista: distribution.t_1_25,
+-                distb: distribution.t_26_50,
+-                distc: distribution.t_51_75,
+-                distd: distribution.t_76_100,
+-                diste: distribution.t_101plus,
+-                show_dist: false,
+-                show_received: settings.richlist.received,
+-                show_balance: settings.richlist.balance,
++            lib.get_richlist_rpc_received(richlist.received, function(received) {
++              richlist.received = received;
++              db.get_distribution(richlist, stats, function(distribution) {
++                //console.log(distribution);
++                res.render('richlist', {
++                  active: 'richlist',
++                  balance: richlist.balance,
++                  received: richlist.received,
++                  stats: stats,
++                  dista: distribution.t_1_25,
++                  distb: distribution.t_26_50,
++                  distc: distribution.t_51_75,
++                  distd: distribution.t_76_100,
++                  diste: distribution.t_101plus,
++                  show_dist: false,
++                  show_received: settings.richlist.received,
++                  show_balance: settings.richlist.balance,
++                });
+               });
+             });
+           });
+diff --git a/lib/explorer.js b/lib/explorer.js
+--- a/lib/explorer.js
++++ b/lib/explorer.js
+@@ -626,6 +626,38 @@ module.exports = {
+     });
+   },
+ 
++  get_richlist_rpc_received: function(items, cb) {
++    var candidates = Array.isArray(items) ? items.slice(0, 100) : [];
++    var result = [];
++
++    module.exports.syncLoop(candidates.length, function(loop) {
++      var i = loop.iteration();
++      var item = candidates[i];
++
++      if (!item || !item.a_id) {
++        loop.next();
++        return;
++      }
++
++      module.exports.get_address_balance(item.a_id, function(rpcBalance) {
++        if (rpcBalance && rpcBalance.received > 0) {
++          result.push({
++            a_id: item.a_id,
++            balance: rpcBalance.balance,
++            received: rpcBalance.received,
++            name: item.name
++          });
++        }
++        loop.next();
++      });
++    }, function() {
++      result.sort(function(a, b) {
++        return b.received - a.received;
++      });
++      return cb(result.slice(0, 100));
++    });
++  },
++
+   get_smartnodes: function(cb) {
+     rpcCommand([{method:'smartnode', parameters: ['list', 'full']}], function(response) {
+       var smartnodes = [];

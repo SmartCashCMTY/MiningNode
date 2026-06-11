@@ -1,0 +1,11 @@
+[Unit]
+Description=Run SmartCash 3.0 CPU miner every target interval
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=55s
+AccuracySec=1s
+Unit=smartcash3-miner.service
+
+[Install]
+WantedBy=timers.target
