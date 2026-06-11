@@ -1,37 +1,63 @@
-Use 2.0.x branch for current release.   Master and other development branches are untested may not compatible with current network.
-------------------------------------------------------------------------------------
+# MiningNode 3.0.0
 
-SmartCash Core
-==============
+SmartCash 3.0.0 node and mining source update for community use.
 
-https://SmartCash.CC
+## What It Does
+- Provides the SmartCash 3.0.0 daemon, mining timer, and helper scripts
+- Supports smartnode, fullnode, seed, and miner roles
+- Keeps mining throttled through systemd during active block generation
 
- Copyright (c) 2009 - 2016 Bitcoin Developers
- Copyright (c) 2017 - 2021 SmartCash Developers
+## Quick Start
+```bash
+sudo bash contrib/smartcash3/install-node.sh miner
+```
 
-What is SmartCash?
-----------------
+## System Requirements
+- Ubuntu Server 24.04 LTS
+- Public IPv4 address for networked roles
+- 2 vCPU or better
+- 4 GB RAM minimum
+- 80 GB SSD or more
 
-SmartCash is an experimental digital currency that enables instant payments to
-anyone, anywhere in the world. Smartcash uses peer-to-peer technology to operate
-with no central authority: managing transactions and issuing money are carried
-out collectively by the network. SmartCash Core is the name of open source
-software which enables the use of this currency.
+## Installation
+```bash
+sudo bash contrib/smartcash3/install-node.sh miner
+```
 
-For more information, as well as an immediately useable, binary version of
-the Smartcash Core software, see https://smartcash.cc/
+Use `smartnode`, `seed`, or `fullnode` as the role when needed.
 
-License
--------
+## Configuration
+- Node config: `/etc/smartcash3/smartcash.conf`
+- Miner config: `/etc/smartcash3/miner.env`
+- Services: `smartcash3.service`, `smartcash3-miner.service`, `smartcash3-miner.timer`
 
-Smartcash Core is released under the terms of the MIT license. See [COPYING](COPYING) for more
-information or see https://opensource.org/licenses/MIT.
+## Update
+- Pull the latest source and re-run the installer for the role you need
 
-Development Process
--------------------
+## Backup
+- `/etc/smartcash3/smartcash.conf`
+- `/etc/smartcash3/miner.env`
+- Any role-specific notes or local overrides
 
-The default branch is regularly built and tested, but is not guaranteed to be
-completely stable. [Tags](https://github.com/smartcash/core-smart/tags) are created
-regularly to indicate new official, stable release versions of SmartCash Core.
+## Security
+- Never commit secrets, seed phrases, private keys, or API keys
+- Keep wallet data and payout settings outside Git
 
-The contribution workflow is described in [CONTRIBUTING.md](CONTRIBUTING.md).
+## Credits
+Original SmartCash Project: https://github.com/smartcash
+This repository is an Update 3.0.0 based on the open-source work of the SmartCash project.
+All rights to original components, trademarks, logos, source code, and documentation remain with their respective owners.
+The original creator and relevant open-source contributors should be acknowledged appropriately.
+
+## License
+SmartCash Core components are generally released under MIT. Third-party components keep their own licenses.
+Please check the original project license.
+
+## Disclaimer
+Use at your own risk. No warranty is provided for functionality, availability, or security. No liability is accepted for direct or indirect damages, data loss, wallet loss, lost private keys, misconfiguration, network issues, blockchain issues, software bugs, or security vulnerabilities.
+
+## Cryptocurrency Risks
+Cryptocurrencies are high-risk digital assets. Losses, including total loss, are possible. Node operation and staking-related workflows may fail or behave unexpectedly. You are responsible for wallet backups, local law compliance, and tax obligations.
+
+## Legal Notice
+Use this software in accordance with the laws and regulations that apply in your jurisdiction. You are responsible for regulatory, tax, and legal compliance in your country. No legal, tax, or financial advice is provided.

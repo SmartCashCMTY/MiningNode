@@ -13,7 +13,7 @@ The codebase is maintained using the “contributor workflow” where everyone w
 
 To contribute a patch, the workflow is as follows:
 
-  - Fork repository
+  - Create your own working copy
   - Create topic branch
   - Commit patches
 
@@ -27,7 +27,7 @@ If a particular commit references another issue, please add the reference, for e
 
 Please refer to the [Git manual](https://git-scm.com/doc) for more information about Git.
 
-  - Push changes to your fork
+  - Push changes to your working copy
   - Create pull request
 
 The title of the pull request should be prefixed by the component or area that the pull request affects. Examples:
@@ -41,7 +41,7 @@ If a pull request is specifically not to be considered for merging (yet) please 
 
 The body of the pull request should contain enough description about what the patch does together with any justification/reasoning. You should include references to any discussions (for example other tickets or mailing list discussions).
 
-At this stage one should expect comments and review from other contributors. You can add more commits to your pull request by committing them locally and pushing to your fork until you have satisfied all feedback.
+At this stage one should expect comments and review from other contributors. You can add more commits to your pull request by committing them locally and pushing to your working copy until you have satisfied all feedback.
 
 Squashing Commits
 ---------------------------

@@ -72,10 +72,10 @@ Community copy/paste setup guides for seed/full nodes, SmartNodes and wallets:
 docs/community-setup-smartcash3.md
 ```
 
-## Fork Point
+## Update Point
 
-- Fork height: `4269520`
-- Fork block hash: `000000002588c4fccbfe698cad5f4454bc60c7d2e8bf95185c2a14ba4e6e1cac`
+- Update height: `4269520`
+- Update block hash: `000000002588c4fccbfe698cad5f4454bc60c7d2e8bf95185c2a14ba4e6e1cac`
 - Last observed CT200 height: `4269526`
 - Last observed CT200 hash: `000000001c41833ee80054c7cf36960db9d66be6cb78e4079f2c1064f296d799`
 - Genesis is unchanged.

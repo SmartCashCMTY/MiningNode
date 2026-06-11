@@ -55,7 +55,7 @@ it's only used for a single invocation, so that's no real concern.
 
 genisoimage cannot compress DMGs, so afterwards, the 'dmg' tool from the
 libdmg-hfsplus project is used to compress it. There are several bugs in this
-tool and its maintainer has seemingly abandoned the project. It has been forked
+tool and its maintainer has seemingly abandoned the project. It has been continued
 and is available (with fixes) here: [theuni/libdmg-hfsplus](https://github.com/theuni/libdmg-hfsplus).
 
 The 'dmg' tool has the ability to create DMGs from scratch as well, but this
