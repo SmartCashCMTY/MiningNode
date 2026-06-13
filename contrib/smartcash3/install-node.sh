@@ -10,7 +10,7 @@ CONFDIR="/etc/smartcash3"
 MINER_ENV="$CONFDIR/miner.env"
 RELEASE_URL="https://github.com/SmartCashCMTY/Node-Client-Wallet/releases/download/v3.0.0"
 ARCHIVE_NAME="smartcash3-3.0.0-x86_64-linux-gnu.tar.gz"
-ARCHIVE_SHA256="458469a13f4f7cdde94c509f15e0306079ae39a2c5f34dc63d14dff88ece36a2"
+ARCHIVE_SHA256="d53c8195768490808c88d178cfb387102b8e69ab452e4c7baddf9af5c44993eb"
 PUBLIC_PEERS=(
   "151.252.59.32:29678"
   "151.252.59.33:29678"
