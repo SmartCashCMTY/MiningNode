@@ -11,7 +11,7 @@ RPC passwords or server credentials.
 - RPC port: `29679` local only
 - SAPI port: `28080` for SmartNodes
 - Explorer: `http://151.252.59.32/explorer/`
-- Bootstrap: `http://151.252.59.32/bootstrap/smartcash3-bootstrap-4269526.tar.gz`
+- Bootstrap: `http://151.252.59.32/bootstrap/smartcash3-bootstrap.tar.gz`
 - Fixed public peers: `151.252.59.32:29678`, `151.252.59.33:29678`
 
 Recommended public 5-CT topology:
@@ -143,10 +143,10 @@ Optional bootstrap before first start or after stopping the service:
 ```bash
 sudo systemctl stop smartcash3
 cd /tmp
-curl -LO http://151.252.59.32/bootstrap/smartcash3-bootstrap-4269526.tar.gz
-curl -LO http://151.252.59.32/bootstrap/smartcash3-bootstrap-4269526.tar.gz.sha256
-sha256sum -c smartcash3-bootstrap-4269526.tar.gz.sha256
-sudo tar -C /var/lib/smartcash3 -xzf smartcash3-bootstrap-4269526.tar.gz
+curl -LO http://151.252.59.32/bootstrap/smartcash3-bootstrap.tar.gz
+curl -LO http://151.252.59.32/bootstrap/smartcash3-bootstrap.tar.gz.sha256
+sha256sum -c smartcash3-bootstrap.tar.gz.sha256
+sudo tar -C /var/lib/smartcash3 -xzf smartcash3-bootstrap.tar.gz
 sudo chown -R smartcash:smartcash /var/lib/smartcash3
 sudo systemctl start smartcash3
 ```

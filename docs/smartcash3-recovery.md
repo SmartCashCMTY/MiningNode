@@ -56,8 +56,8 @@ Recommended public 5-CT topology:
 Bootstrap archive:
 
 ```text
-http://151.252.59.32/bootstrap/smartcash3-bootstrap-4269526.tar.gz
-http://151.252.59.32/bootstrap/smartcash3-bootstrap-4269526.tar.gz.sha256
+http://151.252.59.32/bootstrap/smartcash3-bootstrap.tar.gz
+http://151.252.59.32/bootstrap/smartcash3-bootstrap.tar.gz.sha256
 ```
 
 Public Explorer:
@@ -212,8 +212,8 @@ Bootstrap archive:
 
 ```bash
 systemctl stop smartcash3
-tar --numeric-owner -C /var/lib/smartcash3 -czf /var/www/html/bootstrap/smartcash3-bootstrap-4269526.tar.gz blocks chainstate rewards
-sha256sum /var/www/html/bootstrap/smartcash3-bootstrap-4269526.tar.gz > /var/www/html/bootstrap/smartcash3-bootstrap-4269526.tar.gz.sha256
+tar --numeric-owner -C /var/lib/smartcash3 -czf /var/www/html/bootstrap/smartcash3-bootstrap.tar.gz blocks chainstate rewards
+sha256sum /var/www/html/bootstrap/smartcash3-bootstrap.tar.gz > /var/www/html/bootstrap/smartcash3-bootstrap.tar.gz.sha256
 systemctl start smartcash3
 ```
 
